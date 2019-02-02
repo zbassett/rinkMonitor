@@ -107,5 +107,5 @@ openhab/addons/*
 openhab/conf/*
 openhab/userdata/*
 !openhab/addons/.gitignore
-openhab/conf/.gitignore
-openhab/userdata/.gitignore
+!openhab/conf/.gitignore
+!openhab/userdata/.gitignore
