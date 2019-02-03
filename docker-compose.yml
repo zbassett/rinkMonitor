@@ -7,6 +7,13 @@ services:
       - SYS_RAWIO #GPIO
     devices:
       - '/dev/mem:/dev/mem'
+  rf24:
+    build: ./rf24
+    restart: 'always'
+    cap_add:
+      - SYS_RAWIO #GPIO
+    devices:
+      - '/dev/mem:/dev/mem'
   openhab:
     image: "openhab/openhab:2.4.0"
     restart: always
