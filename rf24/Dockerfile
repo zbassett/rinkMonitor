@@ -1,5 +1,11 @@
 FROM frankwolf/rpi-python3
 
+RUN apt-get update
+RUN apt-get install -y make
+RUN apt-get install -y gcc
+RUN apt-get install -y libxslt-dev libxml2-dev
+RUN apt-get install -y wget git-core
+
 # RUN wget http://tmrh20.github.io/RF24Installer/RPi/install.sh
 # RUN chmod +x install.sh 
 # RUN ./install.sh 
