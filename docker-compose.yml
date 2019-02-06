@@ -46,7 +46,7 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - ../:/notebooks
+      - ../:/root/notebooks
     entrypoint: jupyter lab --no-browser --port 8888 --ip=0.0.0.0 --allow-root --NotebookApp.password='sha1:daba2b026696:b3fb474af010622c27f90aee5420698295d1260d'
 
 volumes:
