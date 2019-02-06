@@ -1,16 +1,20 @@
 FROM frankwolf/rpi-python3
 
-RUN wget http://tmrh20.github.io/RF24Installer/RPi/install.sh
-RUN chmod +x install.sh 
-RUN ./install.sh 
+# RUN wget http://tmrh20.github.io/RF24Installer/RPi/install.sh
+# RUN chmod +x install.sh 
+# RUN ./install.sh 
 
-RUN git clone https://github.com/haseebehsan/RF24Python
+RUN ln -s /usr/lib/arm-linux-gnueabihf/libboost_python-py34.so /usr/lib/arm-linux-gnueabihf/libboost_python3.so
 
-RUN cd ./RF24Python/pyRF24/pyRF24
-RUN python setup.py install
+RUN git clone https://github.com/nRF24/RF24.git
 
-RUN cd ../pyRF24Network
-RUN python setup.py install
+WORKDIR ./nRF24
 
-RUN cd ../pyRF24Mesh
-RUN python setup.py install
+RUN make
+RUN make install
+
+RUN cd ./pyRF24 && python setup.py install
+
+RUN cd ./pyRF24/pyRF24Network && python setup.py install
+
+RUN cd ./pyRF24/pyRF24Mesh && python setup.py install
