@@ -24,9 +24,13 @@ RUN echo $(ls .)
 RUN make
 RUN make install
 
-# RUN cd pyRF24 && python ./setup.py build
-RUN make install
+# RUN cd ./pyRF24 && make
+# run cd ./pyRF24 && make install
 
+# RUN cd pyRF24 && python ./setup.py build
+# RUN make install
+
+RUN cd ./pyRF24 && python setup.py build
 RUN cd ./pyRF24 && python setup.py install
 
 RUN cd ./pyRF24/pyRF24Network && python setup.py install
