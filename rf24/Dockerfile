@@ -59,3 +59,5 @@ RUN pip install -r requirements.txt
 # RUN cd ./pyRF24/pyRF24Network && python setup.py build && python setup.py install
 
 # RUN cd ./pyRF24/pyRF24Mesh && python setup.py build && python setup.py install
+
+CMD '/bin/bash'

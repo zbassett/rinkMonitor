@@ -3,10 +3,16 @@ services:
   flask-app:
     build: ./flask-app
     restart: 'always'
-    cap_add:
-      - SYS_RAWIO #GPIO
-    devices:
-      - '/dev/mem:/dev/mem'
+#     cap_add:
+#       - SYS_RAWIO #GPIO
+#     devices:
+#       - '/dev/mem:/dev/mem'
+    volumes:
+      - ./flask-app:/flask-app
+    ports:
+      - 5555:5555
+    command: bash -c 'gunicorn -w 1 -b 0.0.0.0:5555 flask-app.app:app --timeout 10000 --reload'
+    # command: bash -c 'pwd'
   rf24:
     build: ./rf24
     restart: 'always'
