@@ -3,23 +3,26 @@ services:
   flask-app:
     build: ./flask-app
     restart: 'always'
-#     cap_add:
-#       - SYS_RAWIO #GPIO
-#     devices:
-#       - '/dev/mem:/dev/mem'
     volumes:
       - ./flask-app:/flask-app
     ports:
       - 5555:5555
-    command: bash -c 'gunicorn -w 1 -b 0.0.0.0:5555 flask-app.app:app --timeout 10000 --reload'
+    environment:
+      - PYTHONUNBUFFERED:1
+    command: bash -c 'gunicorn -w 1 -b 0.0.0.0:5555 app:app --timeout 10000 --reload'
     # command: bash -c 'pwd'
-  rf24:
-    build: ./rf24
-    restart: 'always'
-    cap_add:
-      - SYS_RAWIO #GPIO
-    devices:
-      - '/dev/mem:/dev/mem'
+#   rf24:
+#     build: ./rf24
+#     restart: 'always'
+#     cap_add:
+#       - SYS_RAWIO #GPIO
+#     devices:
+#       - '/dev/mem:/dev/mem'
+#     volumes:
+#       - ./rf24:/rf24-app
+#     environment:
+#       - PYTHONUNBUFFERED:1
+#     command: bash -c 'python true.py'
   openhab:
     image: "openhab/openhab:2.4.0"
     restart: always
@@ -33,8 +36,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - ./openhab/conf:/openhab/conf
-      - ./openhab/userdata:/openhab/userdata
-      - ./openhab/addons:/openhab/addons
+#       - ./openhab/userdata:/openhab/userdata
+#       - ./openhab/addons:/openhab/addons
     # The command node is very important. It overrides
     # the "gosu openhab tini -s ./start.sh" command from Dockerfile and runs as root!
     command: "tini -s ./start.sh server"

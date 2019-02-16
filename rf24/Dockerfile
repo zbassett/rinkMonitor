@@ -1,63 +1,84 @@
-FROM frankwolf/rpi-python3
+FROM arm32v7/python:3.7-stretch
 
 RUN apt-get update
 # RUN apt-get upgrade
-RUN apt-get install -y make
-RUN apt-get install -y gcc
+RUN apt-get install -y make cmake gcc
 RUN apt-get install -y libxslt-dev libxml2-dev
 RUN apt-get install -y wget git-core
 
-RUN apt-get install python-setuptools 
+RUN apt-get install -y python-setuptools 
+#libncurses5-dev
 
 # RUN wget http://tmrh20.github.io/RF24Installer/RPi/install.sh
 # RUN chmod +x install.sh 
 # RUN ./install.sh 
 
-RUN apt-get install python-dev libboost-python-dev 
-RUN ln -s /usr/lib/arm-linux-gnueabihf/libboost_python-py34.so /usr/lib/arm-linux-gnueabihf/libboost_python3.so
+WORKDIR /tmp
 
-# RUN git clone https://github.com/intel-iot-devkit/mraa.git && \
-#     cd mraa && \
-#     mkdir build && \
-#     cd build && \
-#     cmake .. -DBUILDSWIGNODE=OFF && \
-#     make install
+#install BCM2835 library
+# RUN wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.58.tar.gz
+# RUN tar zxvf bcm2835-1.58.tar.gz
+# WORKDIR ./bcm2835-1.58
+# RUN ./configure && make && make check && make install
 
-RUN git clone https://github.com/nRF24/RF24.git
-WORKDIR ./RF24
+RUN apt-get install -y python-dev libboost-python-dev 
+# RUN ln -s /usr/lib/arm-linux-gnueabihf/libboost_python-py34.so /usr/lib/arm-linux-gnueabihf/libboost_python3.so
 
-# RUN /bin/sh -c ls
+RUN git clone https://github.com/intel-iot-devkit/mraa.git && \
+    cd mraa && \
+    mkdir build && \
+    cd build && \
+    cmake .. -DBUILDSWIGNODE=OFF && \
+    make install
+    
+WORKDIR /tmp
 
-RUN /bin/sh -c make
-RUN /bin/sh -c make install -B
+COPY Makefile.inc .
+    
+COPY rf24_installer.sh /tmp
+RUN chmod +x /tmp/rf24_installer.sh
+RUN sh /tmp/rf24_installer.sh
 
-# RUN /bin/sh -c cd ./pyRF24 && make
-# run /bin/sh -c cd ./pyRF24 && make install
 
-# RUN cd pyRF24 && python ./setup.py build
-# RUN make install
+# RUN git clone https://github.com/nRF24/RF24.git
+# WORKDIR ./RF24
 
-RUN /bin/sh -c cd ./pyRF24/pyRF24
-RUN /bin/sh -c python setup.py build
-RUN /bin/sh -c python setup.py install
+# COPY Makefile.inc .
 
-RUN /bin/sh -c cd ../pyRF24Network
-RUN /bin/sh -c python setup.py build
-RUN /bin/sh -c python setup.py install
+# # RUN /bin/sh -c ls
 
-RUN /bin/sh -c cd ../pyRF24Mesh
-RUN /bin/sh -c python setup.py build
-RUN /bin/sh -c python setup.py install
+# RUN make
+# RUN /bin/sh -c make install -B
 
-RUN mkdir -p /app
-WORKDIR /app
+# # RUN /bin/sh -c cd ./pyRF24 && make
+# # run /bin/sh -c cd ./pyRF24 && make install
+
+# # RUN cd pyRF24 && python ./setup.py build
+# # RUN make install
+
+# RUN /bin/sh -c cd ./pyRF24
+# RUN /bin/sh -c python setup.py build
+# RUN /bin/sh -c python setup.py install
+
+# RUN /bin/sh -c cd ./pyRF24
+# RUN /bin/sh -c python setup.py build
+# RUN /bin/sh -c python setup.py install
+
+# RUN /bin/sh -c cd ../pyRF24Network
+# RUN /bin/sh -c python setup.py build
+# RUN /bin/sh -c python setup.py install
+
+# RUN /bin/sh -c cd ../pyRF24Mesh
+# RUN /bin/sh -c python setup.py build
+# RUN /bin/sh -c python setup.py install
 
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# RUN cd ./pyRF24/pyRF24Network && python setup.py build && python setup.py install
+RUN mkdir -p /rf24-app
+WORKDIR /rf24-app
 
-# RUN cd ./pyRF24/pyRF24Mesh && python setup.py build && python setup.py install
+# RUN /bin/sh -c pwd
 
 CMD '/bin/bash'
