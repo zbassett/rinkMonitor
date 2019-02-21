@@ -49,9 +49,9 @@ DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
 
 
 //Variables:  Set the item ids to correspond with items in OpenHAB
-String probe_temp_id = "probe_1";
-String dht_hum_id = "dht_temp_1";
-String dht_temp_id = "dht_hum_1";
+String probe_temp_id = "probe_1_temp";
+String dht_hum_id = "dht_1_temp";
+String dht_temp_id = "dht_1_hum";
 
 int chk;
 float dht_hum;  //Stores humidity value

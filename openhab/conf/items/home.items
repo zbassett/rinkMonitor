@@ -1,0 +1,9 @@
+Group    Home                 "Our Home"       <house>                                  ["Building"]
+
+Group    GF                   "Ground Floor"   <groundfloor>   (Home)                   ["GroundFloor"]
+
+Group    Dining               "Dining"                         (Home)                   ["Room"]
+
+Number   Dining_Temperature   "Temperature"    <temperature>   (Dining, gTemperature)   ["Temperature"]   {channel=""}
+
+Group:Number:AVG   gTemperature   "Temperature"   <temperature>   (Home)   ["Temperature"]
