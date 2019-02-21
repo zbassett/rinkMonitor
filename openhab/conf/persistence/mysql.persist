@@ -1,8 +1,7 @@
 Strategies {
     default = everyChange
 }
-
+ 
 Items {
-    probe_1_temp : strategy = default, restoreOnStartup
-    * : strategy = default, restoreOnStartup
+    gTemperature*
 }
