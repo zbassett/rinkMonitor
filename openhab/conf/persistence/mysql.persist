@@ -3,5 +3,5 @@ Strategies {
 }
  
 Items {
-    gTemperature*
+    *: strategy = everyChange, restoreOnStartup
 }
