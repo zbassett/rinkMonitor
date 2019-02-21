@@ -104,7 +104,7 @@ venv.bak/
 .mypy_cache/
 
 openhab/addons/*
-openhab/conf/*
+# openhab/conf/*
 openhab/userdata/*
 !openhab/addons/.gitignore
 !openhab/conf/.gitignore
