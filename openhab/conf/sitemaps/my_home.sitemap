@@ -1,0 +1,11 @@
+sitemap our_home label="Our Home" {
+    Frame {
+        Group item=Dining
+    }
+
+    Frame {
+        Text label="Temperature" icon="temperature" {
+            Default item=Dining_Temperature label="Dining"
+        }
+    }
+}
