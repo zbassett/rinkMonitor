@@ -3,5 +3,6 @@ Strategies {
 }
 
 Items {
+    probe_1_temp : strategy = default, restoreOnStartup
     * : strategy = default, restoreOnStartup
 }

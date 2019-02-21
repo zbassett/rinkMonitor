@@ -7,3 +7,5 @@ Group    Dining               "Dining"                         (Home)           
 Number   Dining_Temperature   "Temperature"    <temperature>   (Dining, gTemperature)   ["Temperature"]   {channel=""}
 
 Group:Number:AVG   gTemperature   "Temperature"   <temperature>   (Home)   ["Temperature"]
+
+Number   probe_1_temp           "Probe 1 Temp"  <temperature>    (Home) ["Temperature"]
