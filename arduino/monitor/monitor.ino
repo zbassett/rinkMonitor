@@ -48,11 +48,16 @@ DallasTemperature sensors(&oneWire);
 DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
 
 
-//Variables
+//Variables:  Set the item ids to correspond with items in OpenHAB
+String probe_temp_id = "probe_1";
+String dht_hum_id = "dht_temp_1";
+String dht_temp_id = "dht_hum_1";
+
 int chk;
 float dht_hum;  //Stores humidity value
 float dht_temp; //Stores temperature value
 float probe_temp;
+
 
 
 void setup() {
@@ -68,7 +73,7 @@ void setup() {
   Serial.println("mesh begun...");
   SPI.begin();      // Init SPI bus
   
-  radio.setPALevel(RF24_PA_HIGH);  //options: RF24_PA_MIN, RF24_PA_LOW, RF24_PA_HIGH and RF24_PA_MAX
+  radio.setPALevel(RF24_PA_MAX);  //options: RF24_PA_MIN, RF24_PA_LOW, RF24_PA_HIGH and RF24_PA_MAX
 }
 
 void loop() {
@@ -104,14 +109,44 @@ void loop() {
     probe_temp = sensors.getTempCByIndex(0);
     dht_hum = dht.readHumidity();
     dht_temp= dht.readTemperature();
+
+    String buf;
+    buf += String(probe_temp_id);
+    buf += String(":");
+    buf += String(probe_temp, 4);
+    buf += String("|");
+    buf += String(dht_temp_id);
+    buf += String(":");
+    buf += String(dht_temp, 4);
+    buf += String("|");
+    buf += String(dht_hum_id);
+    buf += String(":");
+    buf += String(dht_hum, 1);
+    Serial.println(buf);
+
+//    const char buf[] = "woo hoo!!";
     
-    Serial.print("Probe temp: "); 
-    Serial.print(probe_temp);
-    Serial.print(", DHT temp: ");
-    Serial.print(dht_temp);
-    Serial.print(", DHT humidity: ");
-    Serial.print(dht_hum);
-    Serial.println("%");
+//    Serial.print("Probe temp: "); 
+//    Serial.print(probe_temp);
+//    Serial.print(", DHT temp: ");
+//    Serial.print(dht_temp);
+//    Serial.print(", DHT humidity: ");
+//    Serial.print(dht_hum);
+//    Serial.println("%");
+
+    if (!mesh.write(buf.c_str(), 'I', buf.length())) {
+
+      // If a write fails, check connectivity to the mesh network
+      if ( ! mesh.checkConnection() ) {
+        //refresh the network address
+        Serial.println("Renewing Address");
+        mesh.renewAddress();
+      } else {
+        Serial.println("Payload send fail, Test OK");
+      }
+    } else {
+      Serial.print("Sent buf: "); Serial.print(buf); Serial.print(" - size: "); Serial.println(buf.length());
+    }
   }
 
 
