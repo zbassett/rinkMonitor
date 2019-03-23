@@ -109,3 +109,7 @@ openhab/userdata/*
 !openhab/addons/.gitignore
 !openhab/conf/.gitignore
 !openhab/userdata/.gitignore
+
+openhab/conf/persistence/*
+
+home-assistant/config/.storage/*

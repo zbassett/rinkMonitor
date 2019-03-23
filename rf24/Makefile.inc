@@ -1,14 +1,14 @@
 OS=LINUX
 SOC=BCM2835
 DRIVER=RPi
-CPUFLAGS=-march=armv6zk -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard
-CFLAGS=-march=armv6zk -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard -Ofast -Wall -pthread -marm
+CPUFLAGS=-marm -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard
+CFLAGS=-marm -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard -Ofast -Wall -pthread
 PREFIX=/usr/local
 REMOTE_PREFIX=/usr/local
 LIB=rf24
 LIBNAME=librf24.so.1.3.1
 LIB_VERSION=1.3.1
-LIBSYMLINKS=librf24.so.1.3 librf24.so.1 librf24.so
+LIBSYMLINKS=librf24.so.1.3.1 librf24.so.1 librf24.so
 LIBDEPRECATE=librf24-bcm.so
 CC=arm-linux-gnueabihf-gcc
 CXX=arm-linux-gnueabihf-g++
@@ -18,7 +18,7 @@ HEADER_DIR=/usr/local/include/RF24
 REMOTE_HEADER_DIR=/usr/local/include/RF24
 DRIVER_DIR=utility/RPi
 ARCH_DIR=utility
-SHARED_LINKER_FLAGS= -shared -Wl,-soname,librf24.so.1
+SHARED_LINKER_FLAGS= -shared -Wl,-soname,librf24.so.
 SHARED_LINKER_LIBS= -pthread
 LDCONFIG=ldconfig
 REMOTE_LDCONFIG=/sbin/ldconfig

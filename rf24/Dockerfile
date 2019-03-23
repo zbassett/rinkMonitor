@@ -21,8 +21,8 @@ WORKDIR /tmp
 # WORKDIR ./bcm2835-1.58
 # RUN ./configure && make && make check && make install
 
-RUN apt-get install -y python-dev libboost-python-dev 
-# RUN ln -s /usr/lib/arm-linux-gnueabihf/libboost_python-py34.so /usr/lib/arm-linux-gnueabihf/libboost_python3.so
+RUN apt-get install -y python-dev libboost-python-dev gcc mono-mcs g++
+RUN ln -s /usr/lib/arm-linux-gnueabihf/libboost_python-py35.so /usr/lib/arm-linux-gnueabihf/libboost_python3.so
 
 RUN git clone https://github.com/intel-iot-devkit/mraa.git && \
     cd mraa && \
@@ -32,45 +32,15 @@ RUN git clone https://github.com/intel-iot-devkit/mraa.git && \
     make install
     
 WORKDIR /tmp
-
-COPY Makefile.inc .
     
-COPY rf24_installer.sh /tmp
-RUN chmod +x /tmp/rf24_installer.sh
-RUN sh /tmp/rf24_installer.sh
+COPY install.sh /tmp
+RUN chmod +x /tmp/install.sh
+RUN /tmp/install.sh
 
-
-# RUN git clone https://github.com/nRF24/RF24.git
-# WORKDIR ./RF24
-
-# COPY Makefile.inc .
-
-# # RUN /bin/sh -c ls
-
-# RUN make
-# RUN /bin/sh -c make install -B
-
-# # RUN /bin/sh -c cd ./pyRF24 && make
-# # run /bin/sh -c cd ./pyRF24 && make install
-
-# # RUN cd pyRF24 && python ./setup.py build
-# # RUN make install
-
-# RUN /bin/sh -c cd ./pyRF24
-# RUN /bin/sh -c python setup.py build
-# RUN /bin/sh -c python setup.py install
-
-# RUN /bin/sh -c cd ./pyRF24
-# RUN /bin/sh -c python setup.py build
-# RUN /bin/sh -c python setup.py install
-
-# RUN /bin/sh -c cd ../pyRF24Network
-# RUN /bin/sh -c python setup.py build
-# RUN /bin/sh -c python setup.py install
-
-# RUN /bin/sh -c cd ../pyRF24Mesh
-# RUN /bin/sh -c python setup.py build
-# RUN /bin/sh -c python setup.py install
+# install RF24 Python libraries
+RUN cd /tmp/rf24libs/RF24/pyRF24 && python setup.py build && python setup.py install
+RUN cd /tmp/rf24libs/RF24/pyRF24/pyRF24Network && python setup.py build && python setup.py install
+RUN cd /tmp/rf24libs/RF24/pyRF24/pyRF24Mesh && python setup.py build && python setup.py install
 
 COPY requirements.txt .
 RUN pip install --upgrade pip

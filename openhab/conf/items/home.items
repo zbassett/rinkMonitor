@@ -4,8 +4,28 @@ Group    GF                   "Ground Floor"   <groundfloor>   (Home)           
 
 Group    Dining               "Dining"                         (Home)                   ["Room"]
 
-Number   Dining_Temperature   "Temperature"    <temperature>   (Dining, gTemperature)   ["Temperature"]   {channel=""}
-
 Group:Number:AVG   gTemperature   "Temperature"   <temperature>   (Home)   ["Temperature"]
 
-Number   probe_1_temp           "Probe 1 Temp"  <temperature>    (Home) ["Temperature"]
+Group:Number:AVG   gHumidity   "Humidity"      (Home)   ["Humidity"]
+
+Number   Dining_Temperature   "Temperature"    <temperature>   (Dining, gTemperature)   ["Temperature"]   {channel=""}
+
+
+
+Number   probe_1_temp           "Probe 1 Temp"  <temperature>    (Home, gTemperature) ["Temperature"]
+
+Number   dht_1_temp           "DHT 1 Temp"  <temperature>    (Home, gTemperature) ["Temperature"]
+
+Number   dht_1_hum           "DHT 1 Humidity"   (Home, gHumidity) ["Humidity"]
+
+Number   dht_2_temp           "DHT 2 Temp"  <temperature>    (Home, gTemperature) ["Temperature"]
+
+Number   dht_2_hum           "DHT 2 Humidity"   (Home, gHumidity) ["Humidity"]
+
+Number   dht_3_temp           "DHT 3 Temp"  <temperature>    (Home, gTemperature) ["Temperature"]
+
+Number   dht_3_hum           "DHT 3 Humidity"   (Home, gHumidity) ["Humidity"]
+
+Number   dht_4_temp           "DHT 4 Temp"  <temperature>    (Home, gTemperature) ["Temperature"]
+
+Number   dht_4_hum           "DHT 4 Humidity"   (Home, gHumidity) ["Humidity"]

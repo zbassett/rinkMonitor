@@ -1,6 +1,9 @@
 version: '3'
 services:
-  flask-app:
+  redis:
+    image: redis:latest
+    restart: always
+  flask_app:
     build: ./flask-app
     restart: 'always'
     volumes:
@@ -8,50 +11,82 @@ services:
     ports:
       - 5555:5555
     environment:
-      - PYTHONUNBUFFERED:1
+      # - PYTHONUNBUFFERED:1
+      - FLASK_ENV=development
+#     networks:
+#       - mynet
     command: bash -c 'gunicorn -w 1 -b 0.0.0.0:5555 app:app --timeout 10000 --reload'
-    # command: bash -c 'pwd'
-#   rf24:
-#     build: ./rf24
-#     restart: 'always'
-#     cap_add:
-#       - SYS_RAWIO #GPIO
+  home-assistant:
+    image: homeassistant/raspberrypi3-homeassistant
+    volumes:
+      - "./home-assistant/config:/config"
+      - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+    # network_mode: host
+    ports:
+      - "8123:8123"
+#     networks:
+#       - mynet
+  rf24:
+    build: ./rf24
+    restart: 'always'
 #     devices:
-#       - '/dev/mem:/dev/mem'
-#     volumes:
-#       - ./rf24:/rf24-app
-#     environment:
-#       - PYTHONUNBUFFERED:1
-#     command: bash -c 'python true.py'
+#       - /dev/gpiomem
+#       - /dev/mem
+    volumes:
+      - ./rf24:/rf24-app
+      # - /dev/gpiomem:/dev/mem
+    environment:
+      - PYTHONUNBUFFERED:1
+    privileged: true
+    command: python true.py
   openhab:
     image: "openhab/openhab:2.4.0"
     restart: always
-    network_mode: host
+    # network_mode: host
     ports:
       - 8080:8080
     cap_add:
       - NET_ADMIN
       - NET_RAW
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - ./openhab/conf:/openhab/conf
-      - ./openhab/userdata:/openhab/userdata
-      - ./openhab/addons:/openhab/addons
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "./openhab/conf:/openhab/conf"
+      - "./openhab/userdata:/openhab/userdata"
+      - "./openhab/addons:/openhab/addons"
     # The command node is very important. It overrides
     # the "gosu openhab tini -s ./start.sh" command from Dockerfile and runs as root!
     command: "tini -s ./start.sh server"
-  db:
-    image: hypriot/rpi-mysql
-    # command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    env_file: .env
-    ports:
-      - 3306:3306
-    volumes:
-      - db_data:/var/lib/mysql
-  redis:
-    image: redis
+#     networks:
+#       - mynet
+#   db:
+#     image: hypriot/rpi-mysql
+#     # command: --default-authentication-plugin=mysql_native_password
+#     restart: always
+#     env_file: .env
+#     ports:
+#       - 3306:3306
+#     volumes:
+#       - db_data:/var/lib/mysql
+#   redis:
+#     image: redis
+    
+#   psql_db:
+#     image: postgres
+#     restart: always
+#     ports:
+#       - 5432:5432
+#     environment:
+#       POSTGRES_PASSWORD: postgres
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
+
+#   adminer:
+#     image: adminer
+#     restart: always
+#     ports:
+#       - 8081:8080
 #   jupyterlab:
 #     image: "kidig/rpi-jupyter-lab"
 #     ports:
@@ -60,5 +95,9 @@ services:
 #       - ../:/root/notebooks
 #     entrypoint: jupyter lab --no-browser --port 8888 --ip=0.0.0.0 --allow-root --NotebookApp.password='sha1:daba2b026696:b3fb474af010622c27f90aee5420698295d1260d'
 
-volumes:
-  db_data:
+# volumes:
+  # db_data:
+  # pgdata:
+  
+# networks:
+#   mynet:
