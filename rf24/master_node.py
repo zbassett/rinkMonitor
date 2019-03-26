@@ -5,6 +5,7 @@ from RF24Network import *
 from RF24Mesh import *
 
 from struct import unpack
+import requests
 
 
 # radio setup for RPi B Rev2: CS0=Pin 24
@@ -18,7 +19,7 @@ radio.setPALevel(RF24_PA_MAX) # Power Amplifier
 radio.printDetails()
 
 
-def post_to_openhab(data_dict):
+def post_to_homeassistant(data_dict):
     for key in data_dict:
         url = 'http://flask_app:5555/sensors/%s' %key
         data = data_dict[key]
@@ -33,19 +34,13 @@ while 1:
     mesh.DHCP()
 
     while network.available():
-        print("network.available!!!!!")
-        header, payload = network.read(10)
-        print(payload)
+        header, payload = network.read(300)
         if chr(header.type) == 'M':
-            try:
-                print("Rcv {} from 0{:o}".format(unpack("L",payload)[0], header.from_node))
-            except:
-                print('received bad "M" payload')
-            
+            print("Rcv {} from 0{:o}".format(unpack("L",payload)[0], header.from_node))
         elif chr(header.type) == 'I':
             try:
-                # print("Received: " + str(payload))
-                data_list = str(payload).split('|')
+                print("Received: " + payload.decode())
+                data_list = payload.decode().split('|')
                 # print(data_list)
                 data_dict = {}
                 for itm in data_list:
@@ -53,9 +48,11 @@ while 1:
                     data_dict[itm_lst[0]] = itm_lst[1]
 
                 print(data_dict)
-                post_to_openhab(data_dict)
+                try:
+                    post_to_homeassistant(data_dict)
+                except:
+                    print('problem with posting to home assistant.')
             except:
                 print('received bad "I" payload')
-            
         else:
             print("Rcv bad type {} from 0{:o}".format(header.type,header.from_node));

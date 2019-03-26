@@ -13,8 +13,6 @@ services:
     environment:
       # - PYTHONUNBUFFERED:1
       - FLASK_ENV=development
-#     networks:
-#       - mynet
     command: bash -c 'gunicorn -w 1 -b 0.0.0.0:5555 app:app --timeout 10000 --reload'
   home-assistant:
     image: homeassistant/raspberrypi3-homeassistant
@@ -25,8 +23,6 @@ services:
     # network_mode: host
     ports:
       - "8123:8123"
-#     networks:
-#       - mynet
   rf24:
     build: ./rf24
     restart: 'always'
@@ -39,7 +35,7 @@ services:
     environment:
       - PYTHONUNBUFFERED:1
     privileged: true
-    command: python true.py
+    command: python master_node.py
   openhab:
     image: "openhab/openhab:2.4.0"
     restart: always

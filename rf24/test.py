@@ -1,11 +1,8 @@
-#!/usr/bin/env python3
-
 from RF24 import *
 from RF24Network import *
 from RF24Mesh import *
 
 from struct import unpack
-import requests
 
 
 # radio setup for RPi B Rev2: CS0=Pin 24
@@ -34,14 +31,20 @@ while 1:
     mesh.DHCP()
 
     while network.available():
-        header, payload = network.read(300)
+        # print("network.available!!!!!")
+        header, payload = network.read(10)
+        # print(f'payload: { payload }')
         if chr(header.type) == 'M':
-            print("Rcv {} from 0{:o}".format(unpack("L",payload)[0], header.from_node))
+            try:
+                print("Rcv {} from 0{:o}".format(unpack("L",payload)[0], header.from_node))
+            except:
+                print('received bad "M" payload')
+
         elif chr(header.type) == 'I':
             try:
-                print("Received: " + payload.decode())
-                data_list = payload.decode().split('|')
-                # print(data_list)
+                print("Received: " + str(payload))
+                data_list = str(payload).split('|')
+                print(data_list)
                 data_dict = {}
                 for itm in data_list:
                     itm_lst = itm.split(":")
@@ -54,5 +57,6 @@ while 1:
                     print('problem with posting to home assistant.')
             except:
                 print('received bad "I" payload')
+
         else:
             print("Rcv bad type {} from 0{:o}".format(header.type,header.from_node));
