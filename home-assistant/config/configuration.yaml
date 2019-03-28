@@ -30,7 +30,12 @@ switch:
     method: put
     body_on: '{"target": "open"}'
     body_off: '{"target": "closed"}'
-    is_on_template: '{{ value_json.is_active }}'
+    is_on_template: >
+        {% if is_state('sensor.garage_door_1', 'open') %}
+          true
+        {% else %}
+          false
+        {% endif %}
     headers:
       Content-Type: application/json
     verify_ssl: true
@@ -120,5 +125,5 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 
 nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
+  client_id: !secret client_id
+  client_secret: !secret client_secret

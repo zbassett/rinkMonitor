@@ -116,4 +116,4 @@ home-assistant/config/.storage/*
 home-assistant/config/home-assistant_v2.db
 home-assistant/config/home-assistant.log
 
-secrets.yml
+secrets.yaml

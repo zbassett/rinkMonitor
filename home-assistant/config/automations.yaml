@@ -1,1 +1,12 @@
-[]
+  alias: switch.switch_garage_door_1 switch change when sensor triggered
+  trigger:
+    platform: state
+    entity_id: sensor.garage_door_1     #Your entity_id here
+  action:
+    service_template: >
+         {%- if states('sensor.garage_door_1') == 'closed' -%}
+           switch.turn_off
+         {%- else -%}
+           switch.turn_on
+         {%- endif -%}
+    entity_id: switch.switch_garage_door_1     #Your entity_id here
